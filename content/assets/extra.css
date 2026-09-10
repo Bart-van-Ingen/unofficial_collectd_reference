@@ -1,0 +1,105 @@
+/* A framed view onto one section of collectd.conf(5). The body of the frame is
+   included from snippets/conf/, the same file the manual page itself uses. */
+
+.manpage-window {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: .3rem;
+  margin: 1.2em 0;
+  background: var(--md-code-bg-color);
+}
+
+.manpage-window__label {
+  margin: 0;
+  padding: .45rem .8rem;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  background: var(--md-default-fg-color--lightest);
+  border-radius: .3rem .3rem 0 0;
+  font-size: .68rem;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+}
+
+/* Replace the native disclosure marker with one that matches the theme. */
+.manpage-window__label::-webkit-details-marker { display: none; }
+
+.manpage-window__label::before {
+  content: "";
+  width: 0; height: 0;
+  border-left: .35rem solid currentColor;
+  border-top: .25rem solid transparent;
+  border-bottom: .25rem solid transparent;
+  transition: transform .2s ease;
+  flex: none;
+}
+
+.manpage-window[open] > .manpage-window__label::before {
+  transform: rotate(90deg);
+}
+
+.manpage-window[open] > .manpage-window__label {
+  border-radius: .3rem .3rem 0 0;
+}
+
+.manpage-window:not([open]) > .manpage-window__label {
+  border-bottom: none;
+  border-radius: .3rem;
+}
+
+.manpage-window__source {
+  font-size: .7rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.manpage-window__label code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+.manpage-window > *:not(.manpage-window__label) {
+  margin-left: .8rem;
+  margin-right: .8rem;
+}
+
+.manpage-window > *:last-child {
+  margin-bottom: .8rem;
+}
+
+/* Definition lists carry the configuration options: term is the option, the
+   definition is the manual page's description of it. */
+
+.manpage-window dl,
+.md-typeset dl {
+  margin: .6em 0;
+}
+
+.md-typeset dt {
+  font-weight: 600;
+  margin-top: .8em;
+}
+
+.md-typeset dd {
+  margin-left: 1.1rem;
+  border-left: 2px solid var(--md-default-fg-color--lightest);
+  padding-left: .9rem;
+}
+
+/* Back-links from the configuration reference to the plugin pages. */
+.manpage-window__link {
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+/* The plugin index is long; keep it scannable. */
+.md-typeset table:not([class]) th {
+  position: sticky;
+  top: 0;
+}

@@ -1,0 +1,112 @@
+[project]
+name = "collectd-docs"
+version = "0.1.0"
+description = "A unified documentation site for collectd, generated from the collectd sources and wiki."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+collectd-docs = "tools.build:main"
+
+[dependency-groups]
+dev = [
+    "pylint>=4.0.8",
+    "ruff>=0.16.6",
+    "sloppylint",
+    "ty>=0.0.80",
+    "zensical>=0.0.60",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["tools"]
+
+[tool.ruff]
+line-length = 99
+
+[tool.ruff.lint]
+# An explicit select is required: ruff's default set is narrow, and without one
+# the pydocstyle convention below is never actually enforced.
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "D", "PTH", "RUF"]
+# D1xx is deliberately not ignored -- every module, class and function here
+# carries a docstring, so the missing-docstring rules stay on to keep it that way.
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint.isort]
+detect-same-package = false
+force-wrap-aliases = true
+combine-as-imports = true
+force-single-line = false
+lines-after-imports = 2
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+default-section = "local-folder"
+known-first-party = ["tools"]
+
+[tool.pylint.main]
+py-version = "3.12"
+# Pylint ships these checkers switched off by default. Most of them find nothing
+# here, so they cost nothing and stand guard against drift. Listed explicitly
+# because `enable-all-extensions` is a command-line flag and is ignored here.
+load-plugins = [
+    "pylint.extensions.bad_builtin",
+    "pylint.extensions.broad_try_clause",
+    "pylint.extensions.check_elif",
+    "pylint.extensions.code_style",
+    "pylint.extensions.comparison_placement",
+    "pylint.extensions.confusing_elif",
+    "pylint.extensions.consider_refactoring_into_while_condition",
+    "pylint.extensions.consider_ternary_expression",
+    "pylint.extensions.dict_init_mutate",
+    "pylint.extensions.docparams",
+    "pylint.extensions.docstyle",
+    "pylint.extensions.dunder",
+    "pylint.extensions.empty_comment",
+    "pylint.extensions.eq_without_hash",
+    "pylint.extensions.for_any_all",
+    "pylint.extensions.magic_value",
+    "pylint.extensions.mccabe",
+    "pylint.extensions.no_self_use",
+    "pylint.extensions.overlapping_exceptions",
+    "pylint.extensions.private_import",
+    "pylint.extensions.redefined_loop_name",
+    "pylint.extensions.redefined_variable_type",
+    "pylint.extensions.set_membership",
+    "pylint.extensions.typing",
+    "pylint.extensions.while_used",
+]
+
+[tool.pylint.format]
+# Match [tool.ruff] line-length and the editor ruler.
+max-line-length = 99
+
+[tool.pylint."messages control"]
+disable = [
+    # Docstrings ARE required -- ruff's D1xx rules enforce them, with the google
+    # convention. Disabled here only so the same omission is not reported twice.
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    # From the optional checkers above -- these three are dogmatic rather than
+    # informative, and their suggestions read worse than the code they flag.
+    "while-used",                      # flags every while loop, including good ones
+    "magic-value-comparison",          # ~30 hits, nearly all `node.level == N`
+    "consider-using-assignment-expr",  # several suggested walruses are less clear
+]
+
+[tool.uv.sources]
+sloppylint = { git = "https://github.com/rsionnach/sloppylint" }
