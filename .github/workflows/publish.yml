@@ -25,7 +25,8 @@ jobs:
       - id: pages
         uses: actions/configure-pages@v6
 
-      - uses: astral-sh/setup-uv@v10
+      # setup-uv publishes full version tags only; there is no floating v10 tag.
+      - uses: astral-sh/setup-uv@v10.1.0
         with:
           enable-cache: true
 
