@@ -34,7 +34,7 @@ def build_wiki_sections(index: links.LinkIndex) -> None:
                 f'{section}/{stem.lower()}.md',
                 f'# {title}\n\n{conversion.body}',
             )
-            rows.append(f'- [{title}](/{section}/{stem.lower()}/)')
+            rows.append(f'- [{title}]({links.site_path(f"/{section}/{stem.lower()}/")})')
 
         heading, blurb = titles[section]
         write(

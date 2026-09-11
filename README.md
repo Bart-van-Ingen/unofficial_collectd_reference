@@ -29,6 +29,23 @@ $ uv run zensical serve         # preview on http://localhost:8000
 `uv run collectd-docs --update` re-fetches the upstream repositories first.
 The first run clones them into `.cache/` (about 60 MB).
 
+## Publishing
+
+[`.github/workflows/publish.yml`](.github/workflows/publish.yml) builds the
+site and deploys it to GitHub Pages on every push to `main`, or on demand from
+the Actions tab. Pages must be enabled once under **Settings → Pages**, with
+**GitHub Actions** as the source.
+
+Pages serves the site under `/unofficial_collectd_reference/`, not at the root,
+so the workflow passes the published address to the build as `SITE_URL`.
+Every internal link is prefixed with its path. To reproduce the published
+build locally:
+
+```console
+$ SITE_URL=https://bart-van-ingen.github.io/unofficial_collectd_reference/ uv run collectd-docs
+$ uv run zensical build
+```
+
 ## How it works
 
 `docs/` and `snippets/` are **generated in full on every run** and are not

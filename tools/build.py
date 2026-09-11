@@ -32,6 +32,7 @@ def build_content(up: Upstream, plugins: dict[str, Plugin]) -> None:
     for source in sorted(config.CONTENT.rglob('*.md')):
         relative = source.relative_to(config.CONTENT)
         text = source.read_text(encoding='utf-8')
+        text = text.replace('{{ base_path }}', config.BASE_PATH)
         text = text.replace('{{ version }}', config.VERSION)
         text = text.replace('{{ plugin_count }}', str(len(plugins)))
         text = text.replace('{{ wiki_date }}', up.wiki_date)

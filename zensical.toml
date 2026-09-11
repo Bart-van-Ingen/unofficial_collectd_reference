@@ -1,5 +1,7 @@
 [project]
 site_name = "Unofficial collectd reference"
+# Set by tools/build.py from the SITE_URL environment variable (CI sets it for
+# GitHub Pages); the default below is for local builds.
 site_url = "http://localhost:8000/"
 site_description = "Unified reference for collectd 5.12.0: every plugin, every configuration option, and the concepts behind them."
 site_author = "Bart van Ingen"

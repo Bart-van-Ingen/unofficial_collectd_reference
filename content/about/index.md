@@ -28,7 +28,7 @@ Each plugin page ends with a framed section headed *from `collectd.conf(5)`*.
 That frame is a window onto one part of the manual page. The build extracts
 each `Plugin` section from `src/collectd.conf.pod` into a single fragment, and
 both the plugin page and the [full configuration
-reference](/manpages/collectd.conf/) include that one fragment.
+reference]({{ base_path }}/manpages/collectd.conf/) include that one fragment.
 
 The link runs both ways: the frame links into the corresponding place in the
 configuration reference, and every plugin section of the configuration
@@ -53,4 +53,4 @@ in. The hand-written pages — this one and the front page — live in `content/
 
 Wiki links that pointed at any of the above, or at the retired
 `collectd.org/wiki/` site, are reported in the
-[link report](/about/link-report/).
+[link report]({{ base_path }}/about/link-report/).

@@ -7,14 +7,26 @@ the pages that are written for this site.
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import urlparse
 
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / '.cache'
 CONTENT = ROOT / 'content'
 DOCS = ROOT / 'docs'
+
+# --- publishing -------------------------------------------------------------
+
+#: Where the site is published. CI sets this for GitHub Pages; local builds
+#: keep the default and serve from the root.
+SITE_URL = os.environ.get('SITE_URL', 'http://localhost:8000/')
+
+#: The path the site is served under, prefixed to every internal link:
+#: ``/unofficial_collectd_reference`` on GitHub Pages, empty at a domain root.
+BASE_PATH = urlparse(SITE_URL).path.rstrip('/')
 
 # --- upstream sources -------------------------------------------------------
 

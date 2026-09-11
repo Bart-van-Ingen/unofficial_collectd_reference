@@ -157,7 +157,7 @@ def build_plugin_index(plugins: dict[str, Plugin]) -> None:
             else ('wiki' if plugin.wiki_page else 'manpage')
         )
         rows.append(
-            f'| [`{plugin.name}`](/plugins/{plugin.name.lower()}/) '
+            f'| [`{plugin.name}`]({links.plugin_url(plugin.name)}) '
             f'| {plugin.kind} | {configurable} | {docs} |'
         )
 

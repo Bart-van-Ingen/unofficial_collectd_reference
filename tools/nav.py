@@ -1,4 +1,4 @@
-"""Rewrite the generated nav region of ``zensical.toml``."""
+"""Rewrite the generated parts of ``zensical.toml``: the nav and the site URL."""
 
 import re
 
@@ -7,6 +7,9 @@ from tools import (
     links,
 )
 from tools.model import Plugin, by_name
+
+
+SITE_URL_LINE = re.compile(r'^site_url = .*$', re.MULTILINE)
 
 
 def nav_entry(title: str, target: str, indent: int) -> str:
@@ -79,7 +82,7 @@ def build_nav(plugins: dict[str, Plugin]) -> None:  # pylint: disable=too-many-l
     lines.append(']')
 
     path = config.ROOT / 'zensical.toml'
-    text = path.read_text(encoding='utf-8')
+    text = SITE_URL_LINE.sub(f'site_url = "{config.SITE_URL}"', path.read_text(encoding='utf-8'))
     begin, end = '# BEGIN GENERATED NAV', '# END GENERATED NAV'
     pattern = re.compile(re.escape(begin) + r'.*?' + re.escape(end), re.DOTALL)
     replacement = begin + '\n' + '\n'.join(lines) + '\n' + end

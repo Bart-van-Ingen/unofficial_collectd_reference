@@ -78,7 +78,7 @@ def build_conf_manpage(up: Upstream, plugins: dict[str, Plugin], section: int, b
             parts += [
                 (
                     'One section per plugin, in the order the manpage lists them. '
-                    f'See the [plugin index](/plugins/) for all '
+                    f'See the [plugin index]({links.site_path("/plugins/")}) for all '
                     f'{len(plugins)} plugins including those that take no '
                     'configuration.'
                 ),

@@ -42,22 +42,28 @@ def wiki_plugin_name(stem: str) -> str:
     return stem[len('Plugin-') :].lower().replace('-', '_')
 
 
+def site_path(path: str) -> str:
+    """A root-relative *path*, prefixed with the base path the site is served under."""
+
+    return f'{config.BASE_PATH}{path}'
+
+
 def plugin_url(name: str) -> str:
     """The site URL of a plugin's page."""
 
-    return f'/plugins/{name.lower()}/'
+    return site_path(f'/plugins/{name.lower()}/')
 
 
 def filter_url(name: str) -> str:
     """The site URL of a match or target's page."""
 
-    return f'/filters/{name}/'
+    return site_path(f'/filters/{name}/')
 
 
 def manpage_url(name: str, anchor: str | None = None) -> str:
     """The site URL of a manual page, optionally at one of its anchors."""
 
-    url = f'/manpages/{name}/'
+    url = site_path(f'/manpages/{name}/')
 
     return f'{url}#{anchor}' if anchor else url
 
@@ -132,11 +138,11 @@ def build_index(wiki_root: Path, plugins: dict[str, Plugin]) -> LinkIndex:
 
     for section, entries in config.WIKI_SECTIONS.items():
         for stem, _ in entries:
-            index.pages[stem] = f'/{section}/{stem.lower()}/'
-    index.pages['Table-of-Plugins'] = '/plugins/'
-    index.pages['Table-of-Matches'] = '/filters/'
-    index.pages['List-of-manual-pages'] = '/manpages/'
-    index.pages['Chains'] = '/filters/'
+            index.pages[stem] = site_path(f'/{section}/{stem.lower()}/')
+    index.pages['Table-of-Plugins'] = site_path('/plugins/')
+    index.pages['Table-of-Matches'] = site_path('/filters/')
+    index.pages['List-of-manual-pages'] = site_path('/manpages/')
+    index.pages['Chains'] = site_path('/filters/')
 
     return index
 

@@ -18,16 +18,16 @@ This site documents **collectd {{ version }}**, released {{ release_date }}.
 
 <div class="grid cards" markdown>
 
-- **[First steps](/concepts/first-steps/)** — install collectd, enable a couple
+- **[First steps]({{ base_path }}/concepts/first-steps/)** — install collectd, enable a couple
   of plugins, and confirm that values are being written.
 
-- **[All {{ plugin_count }} plugins](/plugins/)** — one page per plugin, each
+- **[All {{ plugin_count }} plugins]({{ base_path }}/plugins/)** — one page per plugin, each
   with its dependencies, its caveats and its configuration options.
 
-- **[collectd.conf(5)](/manpages/collectd.conf/)** — the complete
+- **[collectd.conf(5)]({{ base_path }}/manpages/collectd.conf/)** — the complete
   configuration reference, section by section.
 
-- **[Concepts](/concepts/)** — data sets, value lists, the naming schema and
+- **[Concepts]({{ base_path }}/concepts/)** — data sets, value lists, the naming schema and
   the global cache: the model everything else is built on.
 
 </div>
@@ -50,6 +50,6 @@ Everything here is **generated** from the first two, pinned to the
   with its links rewritten to point into this site. Meeting minutes, release
   notes and pages about plugins that no longer ship are left out.
 
-The [about page](/about/) has the details, and the
-[link report](/about/link-report/) lists every wiki reference that could not be
+The [about page]({{ base_path }}/about/) has the details, and the
+[link report]({{ base_path }}/about/link-report/) lists every wiki reference that could not be
 salvaged.
