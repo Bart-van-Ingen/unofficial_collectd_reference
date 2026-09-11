@@ -19,16 +19,20 @@ PLUGIN_FIELDS = (('Type', 'type'), ('Callbacks', 'callbacks'), *COMMON_FIELDS)
 
 def collect_plugins(up: Upstream) -> dict[str, Plugin]:
     """Every plugin the site documents, keyed by its manpage spelling."""
+
     plugins: dict[str, Plugin] = {}
     wiki_by_plugin: dict[str, str] = {}
+
     for path in sorted(up.wiki.glob('Plugin-*.md')):
         if path.stem in config.WIKI_EXCLUDE_PAGES or path.stem in config.WIKI_COMPANIONS:
             continue
+
         if any(re.search(p, path.stem) for p in config.WIKI_EXCLUDE_PATTERNS):
             continue
         wiki_by_plugin.setdefault(links.wiki_plugin_name(path.stem), path.stem)
 
     names = set(up.plugin_sections) | set(config.CONFIGLESS_PLUGINS)
+
     for name in sorted(names, key=str.lower):
         if name.startswith(config.FILTER_PLUGIN_PREFIXES):
             continue
@@ -45,6 +49,7 @@ def collect_plugins(up: Upstream) -> dict[str, Plugin]:
 
 def plugin_kind(name: str) -> str:
     """Which part of the daemon a plugin belongs to: read, write or filter."""
+
     if name.startswith('write_') or name in {
         'amqp',
         'amqp1',
@@ -58,37 +63,46 @@ def plugin_kind(name: str) -> str:
         'kafka',
     }:
         return 'write'
+
     if name.startswith(('notify_', 'match_', 'target_')):
         return 'filter'
+
     return 'read'
 
 
 def metadata_table(conversion: wikimod.Conversion | None, plugin: Plugin) -> str:
     """The infobox at the top of a plugin page."""
+
     configuration = (
         f'[collectd.conf(5)]({links.manpage_url("collectd.conf")}#plugin-{slugify(plugin.name)})'
         if plugin.has_config
         else 'none'
     )
+
     return infobox(plugin.name, conversion, PLUGIN_FIELDS, configuration)
 
 
 def plugin_summary(up: Upstream, plugin: Plugin, conversion: wikimod.Conversion | None) -> str:
     """A lead paragraph for a plugin page, or empty when its body already opens with prose."""
+
     if conversion:
         for paragraph in conversion.body.split('\n\n'):
             text = paragraph.strip()
+
             if text and not text.startswith(('#', '|', '!', '<', '-', '*')):
                 return ''
+
     if plugin.has_config:
         for node in up.plugin_sections[plugin.name]:
             if node.kind == 'para':
                 return render_inline(node.text, link=links.pod_link)
+
     return ''
 
 
 def build_plugin_pages(up: Upstream, plugins: dict[str, Plugin], index: links.LinkIndex) -> None:
     """Write one page per plugin, along with its configuration snippet."""
+
     for plugin in plugins.values():
         conversion = links.read_wiki(index, plugin.wiki_page) if plugin.wiki_page else None
         parts = [f'# {plugin.name} plugin', '']
@@ -105,6 +119,7 @@ def build_plugin_pages(up: Upstream, plugins: dict[str, Plugin], index: links.Li
         for stem, entry in config.WIKI_COMPANIONS.items():
             if entry.owner != plugin.name:
                 continue
+
             if companion := links.read_wiki(index, stem):
                 parts += [f'## {entry.heading}', '', companion.body, '']
 
@@ -131,7 +146,9 @@ def build_plugin_pages(up: Upstream, plugins: dict[str, Plugin], index: links.Li
 
 def build_plugin_index(plugins: dict[str, Plugin]) -> None:
     """Write the table listing every plugin."""
+
     rows = []
+
     for plugin in sorted(plugins.values(), key=by_name):
         configurable = 'yes' if plugin.has_config else '—'
         docs = (
@@ -143,8 +160,10 @@ def build_plugin_index(plugins: dict[str, Plugin]) -> None:
             f'| [`{plugin.name}`](/plugins/{plugin.name.lower()}/) '
             f'| {plugin.kind} | {configurable} | {docs} |'
         )
+
     total = len(plugins)
     configured = sum(1 for p in plugins.values() if p.has_config)
+
     write(
         'plugins/index.md',
         '\n'.join(

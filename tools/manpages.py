@@ -13,6 +13,7 @@ from tools.upstream import read_pod
 
 def build_manpages(up: Upstream, plugins: dict[str, Plugin]) -> None:
     """Write every manual page, plus the index that lists them."""
+
     for name, section, blurb in config.MANPAGES:
         if name == 'collectd.conf':
             build_conf_manpage(up, plugins, section, blurb)
@@ -55,6 +56,7 @@ def build_conf_manpage(up: Upstream, plugins: dict[str, Plugin], section: int, b
     each one is introduced by a link to the plugin page, so a reader who
     lands in the configuration reference can get to the prose.
     """
+
     parts = [
         f'# collectd.conf({section})',
         '',
@@ -82,6 +84,7 @@ def build_conf_manpage(up: Upstream, plugins: dict[str, Plugin], section: int, b
                 ),
                 '',
             ]
+
             for conf in up.conf_sections:
                 if conf.plugin is None:
                     # Shared options several plugins refer back to; no page of
@@ -101,6 +104,7 @@ def build_conf_manpage(up: Upstream, plugins: dict[str, Plugin], section: int, b
 
                 name = conf.plugin
                 parts += [f'### Plugin {name}', '']
+
                 if name in plugins:
                     parts += [
                         (

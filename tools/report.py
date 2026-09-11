@@ -13,22 +13,30 @@ from tools.output import slugify, write
 
 def classify_target(wiki_root: Path, target: str) -> str:
     """Why a wiki reference could not be turned into a link."""
+
     if target.startswith('image: '):
         return 'missing image'
+
     if target.startswith(('http://', 'https://')):
         return 'retired collectd.org URL'
+
     if target in config.WIKI_EXCLUDE_PAGES:
         return 'excluded from this site'
+
     if any(re.search(pattern, target) for pattern in config.WIKI_EXCLUDE_PATTERNS):
         return 'excluded from this site'
+
     if (wiki_root / f'{target}.md').is_file():
         return 'wiki page not carried over'
+
     return 'missing from the wiki'
 
 
 def build_link_report(index: links.LinkIndex) -> None:
     """Write the report of every wiki reference that could not be linked."""
+
     buckets: dict[str, dict[str, set[str]]] = {}
+
     for stem, targets in index.unresolved.items():
         for target in targets:
             buckets.setdefault(classify_target(index.wiki_root, target), {}).setdefault(
@@ -86,6 +94,7 @@ def build_link_report(index: links.LinkIndex) -> None:
     ]
     counts = {cause: sum(len(v) for v in targets.values()) for cause, targets in buckets.items()}
     order = [cause for cause, _ in sorted(counts.items(), key=itemgetter(1), reverse=True)]
+
     for cause in order:
         lines.append(f'| [{cause}](#{slugify(cause)}) | {counts[cause]} |')
     lines.append('')
@@ -99,6 +108,7 @@ def build_link_report(index: links.LinkIndex) -> None:
             '| Target | Linked from |',
             '|---|---|',
         ]
+
         for target in sorted(buckets[cause]):
             pages = sorted(buckets[cause][target])
             shown = ', '.join(pages[:4]) + (f' +{len(pages) - 4} more' if len(pages) > 4 else '')

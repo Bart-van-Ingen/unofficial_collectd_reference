@@ -28,6 +28,7 @@ from tools.wikipages import build_assets, build_wiki_sections
 
 def build_content(up: Upstream, plugins: dict[str, Plugin]) -> None:
     """Copy the hand-written pages in ``content/`` over the generated tree."""
+
     for source in sorted(config.CONTENT.rglob('*.md')):
         relative = source.relative_to(config.CONTENT)
         text = source.read_text(encoding='utf-8')
@@ -40,6 +41,7 @@ def build_content(up: Upstream, plugins: dict[str, Plugin]) -> None:
 
 def main() -> None:
     """Build the whole site from the pinned upstream sources."""
+
     parser = argparse.ArgumentParser(
         description='Generate the collectd documentation site from the pinned sources.'
     )
@@ -54,6 +56,7 @@ def main() -> None:
 
     if config.DOCS.exists():
         shutil.rmtree(config.DOCS)
+
     if SNIPPETS.exists():
         shutil.rmtree(SNIPPETS)
 

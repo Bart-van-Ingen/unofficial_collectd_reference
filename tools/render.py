@@ -23,53 +23,66 @@ class Options:
 
 def fence_language(code: str) -> str:
     """Guess a highlighting language for a verbatim block."""
+
     if re.search(r'^\s*(<Plugin|<Chain|<Rule|<Match|<Target|LoadPlugin)\b', code, re.MULTILINE):
         return 'apacheconf'
+
     if re.search(r'^\s*(\$|#!)', code):
         return 'console'
+
     return 'text'
 
 
 def indent_block(text: str, prefix: str = INDENT) -> str:
     """Indent every non-empty line of an already-rendered block."""
+
     return '\n'.join(prefix + line if line else '' for line in text.split('\n'))
 
 
 def list_style(items: list[Node]) -> str:
     """Decide how a POD ``=over`` list should be rendered."""
+
     if all(_BULLET.match(item.text.strip()) for item in items):
         return 'bullet'
+
     if all(_NUMBERED.match(item.text.strip()) for item in items):
         return 'numbered'
+
     return 'definition'
 
 
 def render_blocks(nodes: list[Node], opts: Options) -> list[str]:
     """Render each child node, dropping the ones that produce nothing."""
+
     return [rendered for node in nodes if (rendered := render_block(node, opts))]
 
 
 def render_block(node: Node, opts: Options) -> str:
     """Render one node as a single Markdown block."""
-    if node.kind == 'head':
-        level = max(opts.min_heading, min(6, node.level + opts.heading_offset))
-        return f'{"#" * level} {render_inline(node.text, link=opts.link)}'
 
-    if node.kind == 'para':
-        return render_inline(node.text, link=opts.link)
+    match node.kind:
+        case 'head':
+            level = max(opts.min_heading, min(6, node.level + opts.heading_offset))
+            return f'{"#" * level} {render_inline(node.text, link=opts.link)}'
 
-    if node.kind == 'verbatim':
-        return f'```{fence_language(node.text)}\n{node.text}\n```'
+        case 'para':
+            return render_inline(node.text, link=opts.link)
 
-    if node.kind == 'list':
-        return render_list(node, opts)
+        case 'verbatim':
+            return f'```{fence_language(node.text)}\n{node.text}\n```'
 
-    return ''
+        case 'list':
+            return render_list(node, opts)
+
+        case _:
+            return ''
 
 
 def render_list(node: Node, opts: Options) -> str:
     """Render an ``=over`` list as a bullet, numbered or definition list."""
+
     items = [child for child in node.children if child.kind == 'item']
+
     if not items:
         return '\n\n'.join(render_blocks(node.children, opts))
 
@@ -83,6 +96,7 @@ def render_list(node: Node, opts: Options) -> str:
             term = render_inline(item.text, link=opts.link)
             # A definition list term must be a single line.
             term = ' '.join(term.split('\n'))
+
             if body:
                 first, *rest = body
                 chunks = [f':{INDENT[1:]}{indent_block(first)[len(INDENT) :]}']
@@ -94,6 +108,7 @@ def render_list(node: Node, opts: Options) -> str:
 
         marker = '-' if style == 'bullet' else f'{position}.'
         marker = marker.ljust(len(INDENT))
+
         if body:
             first, *rest = body
             chunks = [marker + indent_block(first)[len(INDENT) :]]
@@ -118,4 +133,5 @@ def to_markdown(
     can be embedded under a heading the including page provides; ``min_heading``
     is the shallowest level it may end up at.
     """
+
     return '\n\n'.join(render_blocks(node.children, Options(heading_offset, min_heading, link)))

@@ -32,8 +32,12 @@ line-length = 99
 # An explicit select is required: ruff's default set is narrow, and without one
 # the pydocstyle convention below is never actually enforced.
 select = ["E", "W", "F", "I", "B", "UP", "SIM", "D", "PTH", "RUF"]
-# D1xx is deliberately not ignored -- every module, class and function here
-# carries a docstring, so the missing-docstring rules stay on to keep it that way.
+# D1xx stays enabled: every module, class and function here carries a docstring.
+ignore = [
+    # House style is a blank line after every docstring, which D202 forbids.
+    # It is autofixable, so leaving it on would silently strip them again.
+    "D202",
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

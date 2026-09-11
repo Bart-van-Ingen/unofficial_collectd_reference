@@ -16,16 +16,19 @@ FILTER_FIELDS = COMMON_FIELDS
 
 def filter_metadata(up: Upstream, name: str, conversion: wikimod.Conversion | None) -> str:
     """The infobox at the top of a match or target page."""
+
     configuration = (
         f'[collectd.conf(5)]({links.manpage_url("collectd.conf")}#filter-configuration)'
         if name in up.filter_items
         else 'none'
     )
+
     return infobox(name, conversion, FILTER_FIELDS, configuration)
 
 
 def build_filter_pages(up: Upstream, index: links.LinkIndex) -> None:
     """Write one page per match and target, plus the filter-chain overview."""
+
     names = links.filter_names()
     wiki_by_plugin = {v: k for k, v in config.WIKI_FILTER_PAGES.items()}
 
@@ -34,9 +37,11 @@ def build_filter_pages(up: Upstream, index: links.LinkIndex) -> None:
         parts = [f'# {title}', '']
 
         conversion = None
+
         if stem := wiki_by_plugin.get(name):
             conversion = links.read_wiki(index, stem)
         parts += [filter_metadata(up, name, conversion), '']
+
         if conversion:
             parts += [conversion.body, '']
 

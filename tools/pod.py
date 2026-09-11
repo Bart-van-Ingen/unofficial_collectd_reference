@@ -55,20 +55,25 @@ class Node:
 
 def paragraphs(pod: str) -> Iterable[list[str]]:
     """Yield POD paragraphs (runs of non-blank lines)."""
+
     current: list[str] = []
+
     for line in pod.expandtabs(8).splitlines():
         if line.strip():
             current.append(line)
         elif current:
             yield current
             current = []
+
     if current:
         yield current
 
 
 def dedent(lines: list[str]) -> str:
     """Strip the common leading indentation from a verbatim block."""
+
     indent = min(len(line) - len(line.lstrip()) for line in lines if line.strip())
+
     return '\n'.join(line[indent:] if line.strip() else '' for line in lines)
 
 
@@ -78,6 +83,7 @@ def dedent(lines: list[str]) -> str:
 # One branch per POD command; collapsing them would hide the grammar.
 def parse(pod: str) -> Node:  # pylint: disable=too-many-branches,too-complex
     """Parse a POD document into a tree of :class:`Node`."""
+
     root = Node('root')
     stack: list[Node] = [root]
 
@@ -94,13 +100,16 @@ def parse(pod: str) -> Node:  # pylint: disable=too-many-branches,too-complex
                     node = Node('list', level=int(argument or 4))
                     stack[-1].children.append(node)
                     stack.append(node)
+
                 case 'back':
                     while len(stack) > 1:
                         if stack.pop().kind == 'list':
                             break
+
                 case 'item':
                     if stack[-1].kind == 'item':
                         stack.pop()
+
                     if stack[-1].kind != 'list':  # stray =item, synthesise a list
                         node = Node('list', level=4)
                         stack[-1].children.append(node)
@@ -108,11 +117,14 @@ def parse(pod: str) -> Node:  # pylint: disable=too-many-branches,too-complex
                     item = Node('item', text=argument)
                     stack[-1].children.append(item)
                     stack.append(item)
+
                 case _ if command.startswith('head'):
                     del stack[1:]  # a =head always closes back to the root
                     root.children.append(Node('head', level=int(command[4:] or 1), text=argument))
+
                 case _ if command in _IGNORED_COMMANDS:
                     continue
+
                 case _:
                     raise ValueError(f'unsupported POD command: ={command}')
 
@@ -135,32 +147,41 @@ def parse(pod: str) -> Node:  # pylint: disable=too-many-branches,too-complex
 
 def escape(text: str) -> str:
     """Escape text so Markdown renders it literally."""
+
     text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
     return _ESCAPE.sub(r'\\\1', text)
 
 
 def code_span(text: str) -> str:
     """Wrap text in a Markdown code span, widening the fence as needed."""
+
     if not text:
         return ''
     ticks = '`'
+
     while ticks in text:
         ticks += '`'
     pad = ' ' if text.startswith('`') or text.endswith('`') else ''
+
     return f'{ticks}{pad}{text}{pad}{ticks}'
 
 
 def matching_angle(text: str, start: int) -> int:
     """Index of the ``>`` closing the code opened just before *start*."""
+
     depth = 1
+
     for i in range(start, len(text)):
         char = text[i]
         if char == '<' and i and text[i - 1].isupper() and (i < 2 or not text[i - 2].isalnum()):
             depth += 1
         elif char == '>':
             depth -= 1
+
             if depth == 0:
                 return i
+
     return -1
 
 
@@ -173,6 +194,7 @@ def render_inline(  # pylint: disable=too-complex
     With ``plain=True`` the result is unescaped literal text, used for the
     inside of code spans and for anything that must not contain markup.
     """
+
     out: list[str] = []
     position = 0
 
@@ -201,26 +223,34 @@ def render_inline(  # pylint: disable=too-complex
         match letter:
             case 'E':
                 entity = _ENTITIES.get(inner)
+
                 if entity is None and inner.isdigit():
                     entity = chr(int(inner))
                 entity = entity if entity is not None else inner
                 out.append(entity if plain else escape(entity))
+
             case 'X' | 'Z':  # index entry / zero-width: no output
                 continue
+
             case 'C' | 'F':
                 literal = render_inline(inner, plain=True, link=link)
                 out.append(literal if plain else code_span(literal))
+
             case 'B':
                 body = render_inline(inner, plain=plain, link=link)
                 out.append(body if plain else f'**{body}**')
+
             case 'I':
                 body = render_inline(inner, plain=plain, link=link)
                 out.append(body if plain else f'*{body}*')
+
             case 'S':
                 body = render_inline(inner, plain=plain, link=link)
                 out.append(body.replace(' ', '\N{NO-BREAK SPACE}'))
+
             case 'L':
                 out.append(render_link(inner, plain=plain, link=link))
+
             case _:
                 out.append(render_inline(inner, plain=plain, link=link))
 
@@ -229,7 +259,9 @@ def render_inline(  # pylint: disable=too-complex
 
 def render_link(target: str, *, plain: bool, link: LinkResolver | None) -> str:
     """Render one ``L<>`` link, degrading to a code span when it cannot resolve."""
+
     label, _, destination = target.partition('|')
+
     if not destination:
         label, destination = '', target
 
@@ -239,4 +271,5 @@ def render_link(target: str, *, plain: bool, link: LinkResolver | None) -> str:
     if plain or url is None:
         rendered = render_inline(text, plain=True, link=link)
         return rendered if plain else code_span(rendered)
+
     return f'[{render_inline(text, plain=False, link=link)}]({url})'

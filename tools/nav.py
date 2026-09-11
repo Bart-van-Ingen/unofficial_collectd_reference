@@ -11,18 +11,23 @@ from tools.model import Plugin, by_name
 
 def nav_entry(title: str, target: str, indent: int) -> str:
     """One ``{ "Title" = "path" }`` line of the generated nav."""
+
     pad = '  ' * indent
+
     return f'{pad}{{ "{title}" = "{target}" }},'
 
 
 def nav_group(title: str, children: list[str], indent: int) -> list[str]:
     """One nav section wrapping *children* under a heading."""
+
     pad = '  ' * indent
+
     return [f'{pad}{{ "{title}" = [', *children, f'{pad}] }},']
 
 
 def build_nav(plugins: dict[str, Plugin]) -> None:  # pylint: disable=too-many-locals
     """Rewrite the generated region of ``zensical.toml``."""
+
     lines: list[str] = ['nav = [', nav_entry('Home', 'index.md', 1)]
 
     for section, heading in (
@@ -79,6 +84,7 @@ def build_nav(plugins: dict[str, Plugin]) -> None:  # pylint: disable=too-many-l
     pattern = re.compile(re.escape(begin) + r'.*?' + re.escape(end), re.DOTALL)
     replacement = begin + '\n' + '\n'.join(lines) + '\n' + end
     match = pattern.search(text)
+
     if match is None:
         raise SystemExit('zensical.toml is missing the generated nav markers')
     path.write_text(text[: match.start()] + replacement + text[match.end() :], encoding='utf-8')
