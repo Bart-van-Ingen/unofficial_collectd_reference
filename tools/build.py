@@ -43,7 +43,7 @@ def main() -> None:
     """Build the whole site from the pinned upstream sources."""
 
     parser = argparse.ArgumentParser(
-        description='Generate the collectd documentation site from the pinned sources.'
+        description='Generate the Unofficial collectd reference site from the pinned sources.'
     )
     parser.add_argument(
         '--update',

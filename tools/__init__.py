@@ -1,1 +1,1 @@
-"""Build tooling for the collectd documentation site."""
+"""Build tooling for the Unofficial collectd reference site."""

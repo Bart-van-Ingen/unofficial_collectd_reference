@@ -1,4 +1,10 @@
-# collectd documentation
+# Unofficial collectd reference
+
+> [!WARNING]
+> This is an **unofficial** project and is not directly affiliated with
+> [collectd](https://github.com/collectd/collectd). I offer it as a way to
+> navigate collectd's existing documentation more easily; the authoritative
+> sources remain the collectd repository and its wiki.
 
 A single documentation site for **collectd 5.12.0**, generated from the two
 places collectd's documentation actually lives:

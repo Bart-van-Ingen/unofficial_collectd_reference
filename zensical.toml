@@ -1,8 +1,8 @@
 [project]
-site_name = "collectd documentation"
+site_name = "Unofficial collectd reference"
 site_url = "http://localhost:8000/"
 site_description = "Unified reference for collectd 5.12.0: every plugin, every configuration option, and the concepts behind them."
-site_author = "collectd contributors"
+site_author = "Bart van Ingen"
 copyright = "Documentation generated from the collectd sources and wiki, which are licensed GPLv2."
 
 repo_url = "https://github.com/collectd/collectd"

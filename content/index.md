@@ -1,4 +1,12 @@
-# collectd documentation
+# Unofficial collectd reference
+
+!!! warning "Unofficial site"
+
+    This site is not directly affiliated with the collectd project. I offer it
+    as a way to navigate collectd's existing documentation more easily; the
+    authoritative sources remain the
+    [collectd repository](https://github.com/collectd/collectd) and its
+    [wiki](https://github.com/collectd/collectd.wiki).
 
 collectd is a daemon that collects system and application performance metrics
 and passes them on to storage back-ends, monitoring systems and message
@@ -30,7 +38,7 @@ collectd's documentation is spread across three places: the manual pages in the
 source tree, the GitHub wiki, and collectd.org. They overlap, they disagree,
 and the wiki links to a great deal that no longer exists.
 
-Everything here is generated from the first two, pinned to the
+Everything here is **generated** from the first two, pinned to the
 {{ version }} release:
 
 - **Configuration options** come from `src/collectd.conf.pod`, the source of
