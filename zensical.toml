@@ -7,8 +7,8 @@ site_description = "Unified reference for collectd 5.12.0: every plugin, every c
 site_author = "Bart van Ingen"
 copyright = "Documentation generated from the collectd sources and wiki, which are licensed GPLv2."
 
-repo_url = "https://github.com/collectd/collectd"
-repo_name = "collectd/collectd"
+repo_url = "https://github.com/Bart-van-Ingen/unofficial_collectd_reference"
+repo_name = "Bart-van-Ingen/unofficial_collectd_reference"
 
 extra_css = ["assets/extra.css"]
 
@@ -264,6 +264,8 @@ nav = [
 # END GENERATED NAV
 
 [project.theme]
+favicon = "assets/images/logo.png"
+logo = "assets/images/logo.png"
 language = "en"
 features = [
   "content.code.copy",

@@ -27,7 +27,7 @@ from tools.wikipages import build_assets, build_wiki_sections
 
 
 def build_content(up: Upstream, plugins: dict[str, Plugin]) -> None:
-    """Copy the hand-written pages in ``content/`` over the generated tree."""
+    """Copy the hand-written pages and assets in ``content/`` over the generated tree."""
 
     for source in sorted(config.CONTENT.rglob('*.md')):
         relative = source.relative_to(config.CONTENT)
@@ -38,6 +38,12 @@ def build_content(up: Upstream, plugins: dict[str, Plugin]) -> None:
         text = text.replace('{{ wiki_date }}', up.wiki_date)
         text = text.replace('{{ release_date }}', up.version_date)
         write(str(relative), text)
+
+    for source in sorted(config.CONTENT.rglob('*')):
+        if source.is_file() and source.suffix != '.md':
+            target = config.DOCS / source.relative_to(config.CONTENT)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
 
 
 def main() -> None:

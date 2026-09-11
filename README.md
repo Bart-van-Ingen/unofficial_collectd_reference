@@ -1,3 +1,7 @@
+<p align="center">
+   <img src="content/assets/images/logo.png" alt="Unofficial collectd reference logo" width="30%" />
+</p>
+
 # Unofficial collectd reference
 
 > [!WARNING]
@@ -17,6 +21,10 @@ places collectd's documentation actually lives:
 
 Built with [Zensical](https://zensical.org). Dependencies are managed with
 [uv](https://docs.astral.sh/uv/).
+
+<h2 align="center">
+   <a href="https://bart-van-ingen.github.io/unofficial_collectd_reference/">Read the documentation &rarr;</a>
+</h2>
 
 ## Usage
 
