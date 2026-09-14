@@ -1,8 +1,8 @@
 <p align="center">
-   <img src="content/assets/images/logo.png" alt="Unofficial collectd reference logo" width="30%" />
+   <img src="content/assets/images/logo.png" alt="Collectd unofficial reference logo" width="30%" />
 </p>
 
-# Unofficial collectd reference
+# Collectd unofficial reference
 
 > [!WARNING]
 > This is an **unofficial** project and is not directly affiliated with
@@ -23,7 +23,7 @@ Built with [Zensical](https://zensical.org). Dependencies are managed with
 [uv](https://docs.astral.sh/uv/).
 
 <h2 align="center">
-   <a href="https://bart-van-ingen.github.io/unofficial_collectd_reference/">Read the documentation &rarr;</a>
+   <a href="https://bart-van-ingen.github.io/collectd_unofficial_reference/">Read the documentation &rarr;</a>
 </h2>
 
 ## Usage
@@ -44,13 +44,13 @@ site and deploys it to GitHub Pages on every push to `main`, or on demand from
 the Actions tab. Pages must be enabled once under **Settings → Pages**, with
 **GitHub Actions** as the source.
 
-Pages serves the site under `/unofficial_collectd_reference/`, not at the root,
+Pages serves the site under `/collectd_unofficial_reference/`, not at the root,
 so the workflow passes the published address to the build as `SITE_URL`.
 Every internal link is prefixed with its path. To reproduce the published
 build locally:
 
 ```console
-$ SITE_URL=https://bart-van-ingen.github.io/unofficial_collectd_reference/ uv run collectd-docs
+$ SITE_URL=https://bart-van-ingen.github.io/collectd_unofficial_reference/ uv run collectd-docs
 $ uv run zensical build
 ```
 

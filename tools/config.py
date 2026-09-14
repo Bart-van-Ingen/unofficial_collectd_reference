@@ -25,7 +25,7 @@ DOCS = ROOT / 'docs'
 SITE_URL = os.environ.get('SITE_URL', 'http://localhost:8000/')
 
 #: The path the site is served under, prefixed to every internal link:
-#: ``/unofficial_collectd_reference`` on GitHub Pages, empty at a domain root.
+#: ``/collectd_unofficial_reference`` on GitHub Pages, empty at a domain root.
 BASE_PATH = urlparse(SITE_URL).path.rstrip('/')
 
 # --- upstream sources -------------------------------------------------------

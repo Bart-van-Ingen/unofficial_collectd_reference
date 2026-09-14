@@ -1,8 +1,8 @@
 <p align="center">
-   <img src="assets/images/logo.png" alt="Unofficial collectd reference logo" width="30%" />
+   <img src="assets/images/logo.png" alt="Collectd unofficial reference logo" width="30%" />
 </p>
 
-# Unofficial collectd reference
+# Collectd unofficial reference
 
 !!! warning "Unofficial site"
 

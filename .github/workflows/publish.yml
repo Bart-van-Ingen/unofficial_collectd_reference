@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v7
 
       # Provides the address GitHub Pages serves the site from, e.g.
-      # https://bart-van-ingen.github.io/unofficial_collectd_reference
+      # https://bart-van-ingen.github.io/collectd_unofficial_reference
       - id: pages
         uses: actions/configure-pages@v6
 
